@@ -1,0 +1,64 @@
+# ReasonGraph local development stack.
+#
+# What this file does:
+# - Runs Neo4j locally for ReasonGraph graph storage.
+# - Exposes Neo4j Browser on http://localhost:7474.
+# - Exposes Bolt on localhost:7687 for the Python backend.
+# - Uses named Docker volumes so database files are not committed to Git.
+# - Adds a healthcheck so future backend containers can wait for Neo4j.
+# - Uses environment variables so secrets and local settings stay outside Git.
+
+
+services:
+  neo4j:
+    image: neo4j:${NEO4J_VERSION:-5.26}
+    container_name: reasongraph-neo4j
+
+    ports:
+      - "${NEO4J_HTTP_PORT:-7474}:7474"
+      - "${NEO4J_BOLT_PORT:-7687}:7687"
+
+    environment:
+      NEO4J_AUTH: "neo4j/${NEO4J_PASSWORD:-reasongraph}"
+      NEO4J_PLUGINS: '["apoc", "graph-data-science"]'
+
+      NEO4J_server_memory_heap_initial__size: "${NEO4J_HEAP_INITIAL:-512m}"
+      NEO4J_server_memory_heap_max__size: "${NEO4J_HEAP_MAX:-1G}"
+      NEO4J_server_memory_pagecache_size: "${NEO4J_PAGECACHE:-512m}"
+
+      NEO4J_apoc_export_file_enabled: "true"
+      NEO4J_apoc_import_file_enabled: "true"
+      NEO4J_apoc_import_file_use__neo4j__config: "true"
+
+    volumes:
+      - reasongraph_neo4j_data:/data
+      - reasongraph_neo4j_logs:/logs
+      - reasongraph_neo4j_plugins:/plugins
+      - reasongraph_neo4j_import:/var/lib/neo4j/import
+
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "cypher-shell -u neo4j -p ${NEO4J_PASSWORD:-reasongraph} 'RETURN 1;' || exit 1"
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+    restart: unless-stopped
+
+    networks:
+      - reasongraph_net
+
+volumes:
+  reasongraph_neo4j_data:
+  reasongraph_neo4j_logs:
+  reasongraph_neo4j_plugins:
+  reasongraph_neo4j_import:
+
+networks:
+  reasongraph_net:
+    name: reasongraph_net

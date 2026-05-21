@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from reasongraph.backend.api.routes_projects import router as projects_router
 from reasongraph.backend.db.init_db import init_db
 
 app = FastAPI(
@@ -20,3 +21,6 @@ def on_startup() -> None:
 @app.get("/health")
 def health_check() -> dict[str, str]:
     return {"status": "ok"}
+
+
+app.include_router(projects_router)

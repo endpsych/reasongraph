@@ -1,5 +1,7 @@
 # Data
 /data/
+data/app/*.db
+data/app/*.db-*
 
 # Mac OS-specific storage files
 .DS_Store

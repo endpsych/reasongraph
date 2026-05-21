@@ -3,15 +3,16 @@ Reasoning extraction service for ReasonGraph.
 
 What this file does:
 - Loads an issue and its PositionInput records from SQLite.
-- Creates a deterministic local draft extraction from raw position fields.
-- Stores the extraction output as JSON in an ExtractionRun.
+- Creates deterministic local draft extractions from raw position fields.
+- Creates OpenAI-backed structured extractions when requested.
+- Stores extraction output as JSON in an ExtractionRun.
 - Provides read helpers for extraction runs.
 
 How it fits into ReasonGraph:
-- This is the foundation for the future OpenAI extraction workflow.
-- The local draft extractor gives us a stable review workflow before adding
-  paid/network LLM calls.
-- Later, the LLM extractor should produce the same ExtractedReasoningGraph shape.
+- This is the foundation for the extraction review workflow.
+- Local draft extraction allows offline development and tests.
+- LLM extraction uses provider settings and selected models for better
+  structured reasoning extraction.
 """
 
 # ---------------------------------------------------------------------
@@ -24,6 +25,7 @@ import re
 from sqlmodel import Session, select
 
 from reasongraph.backend.db.models import ExtractionRun, Issue, PositionInput
+from reasongraph.backend.llm.openai_extraction import extract_reasoning_graph_with_openai
 from reasongraph.backend.schemas.extraction import (
     ClaimType,
     ExtractedAssumption,
@@ -38,6 +40,8 @@ from reasongraph.backend.schemas.extraction import (
     ExtractionCreate,
     ExtractionMethod,
 )
+from reasongraph.backend.schemas.provider import ProviderConnectionTestRequest, ProviderName
+from reasongraph.backend.services.provider_service import resolve_api_key
 
 # ---------------------------------------------------------------------
 # Text helpers
@@ -220,6 +224,44 @@ def _load_issue_positions(
 
 
 # ---------------------------------------------------------------------
+# LLM extraction helpers
+# ---------------------------------------------------------------------
+
+
+def _build_provider_request(extraction_in: ExtractionCreate) -> ProviderConnectionTestRequest:
+    """Build a provider key-resolution request from extraction settings."""
+    return ProviderConnectionTestRequest(
+        provider=extraction_in.provider,
+        model=extraction_in.model,
+        profile_name=extraction_in.profile_name,
+        key_storage_mode=extraction_in.key_storage_mode,
+        api_key=extraction_in.api_key,
+    )
+
+
+def _build_llm_extraction(
+    issue: Issue,
+    positions: list[PositionInput],
+    extraction_in: ExtractionCreate,
+) -> ExtractedReasoningGraph:
+    """Build an LLM extraction using the configured provider."""
+    if extraction_in.provider != ProviderName.openai:
+        raise ValueError("Only OpenAI extraction is supported in the MVP.")
+
+    api_key = resolve_api_key(_build_provider_request(extraction_in))
+
+    if not api_key:
+        raise ValueError("No API key available for LLM extraction.")
+
+    return extract_reasoning_graph_with_openai(
+        issue=issue,
+        positions=positions,
+        api_key=api_key,
+        model=extraction_in.model,
+    )
+
+
+# ---------------------------------------------------------------------
 # Extraction run service
 # ---------------------------------------------------------------------
 
@@ -237,15 +279,22 @@ def create_extraction_run(
 
     issue, positions = loaded
 
-    if extraction_in.method != ExtractionMethod.local_draft:
-        raise ValueError("Only local_draft extraction is implemented in this step.")
+    if extraction_in.method == ExtractionMethod.local_draft:
+        extracted_graph = build_local_draft_extraction(issue=issue, positions=positions)
+    elif extraction_in.method == ExtractionMethod.llm:
+        extracted_graph = _build_llm_extraction(
+            issue=issue,
+            positions=positions,
+            extraction_in=extraction_in,
+        )
+    else:
+        raise ValueError(f"Unsupported extraction method: {extraction_in.method}")
 
-    extracted_graph = build_local_draft_extraction(issue=issue, positions=positions)
     raw_output_json = extracted_graph.model_dump_json(indent=2)
 
     extraction_run = ExtractionRun(
         issue_id=issue.id,
-        provider=extraction_in.provider,
+        provider=str(extraction_in.provider),
         model=extraction_in.model,
         prompt_version=extraction_in.prompt_version,
         status="draft",

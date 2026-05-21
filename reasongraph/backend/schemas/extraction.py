@@ -4,7 +4,8 @@ Reasoning extraction schemas for ReasonGraph.
 What this file does:
 - Defines structured schemas for extracted reasoning objects.
 - Defines API schemas for creating and reading extraction runs.
-- Provides the JSON shape that later LLM extraction workflows should produce.
+- Supports both local draft extraction and LLM-backed extraction.
+- Provides the JSON shape that OpenAI extraction workflows should produce.
 
 How it fits into ReasonGraph:
 - Stakeholders enter raw position text.
@@ -22,6 +23,8 @@ from datetime import datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+from reasongraph.backend.schemas.provider import KeyStorageMode, ProviderName
 
 # ---------------------------------------------------------------------
 # Extraction enums
@@ -153,9 +156,15 @@ class ExtractionCreate(BaseModel):
     """Request to create a new extraction run."""
 
     method: ExtractionMethod = ExtractionMethod.local_draft
-    provider: str = "local"
-    model: str = "local-draft"
+    provider: ProviderName = ProviderName.openai
+    model: str = "gpt-5-nano"
     prompt_version: str = "extract_reasoning_graph_v0.1"
+    profile_name: str = "default"
+    key_storage_mode: KeyStorageMode = KeyStorageMode.session_only
+    api_key: str | None = Field(
+        default=None,
+        description="Raw API key for session-only use. Never stored or returned.",
+    )
 
 
 class ExtractionRunRead(BaseModel):

@@ -1,0 +1,72 @@
+{
+  "project": {
+    "name": "ReasonGraph MVP Examples",
+    "description": "Seed examples for testing business reasoning and disagreement structuring."
+  },
+  "issue": {
+    "title": "Vendor selection",
+    "business_context": "The company must decide whether to buy a vendor solution or build the capability internally.",
+    "decision_question": "Should the company buy Vendor X, build internally, or use a hybrid approach?",
+    "mode": "reasoning_analysis",
+    "in_scope": "Time to value, total cost of ownership, vendor lock-in, internal capability, data portability, integration complexity, strategic control.",
+    "out_of_scope": "General opinions about outsourcing, unrelated technology stack debates."
+  },
+  "stakeholders": [
+    {
+      "name": "Operations Director",
+      "role": "Delivery and process owner",
+      "organization_unit": "Operations"
+    },
+    {
+      "name": "Engineering Lead",
+      "role": "Technical implementation owner",
+      "organization_unit": "Engineering"
+    },
+    {
+      "name": "Procurement Manager",
+      "role": "Vendor evaluation and contract owner",
+      "organization_unit": "Procurement"
+    }
+  ],
+  "positions": [
+    {
+      "stakeholder_name": "Operations Director",
+      "label": "Buy Vendor X",
+      "recommendation": "Buy Vendor X because the company needs the capability quickly.",
+      "reasoning_text": "Vendor X already provides most of the required functionality. Buying reduces implementation time and allows operations to improve processes sooner.",
+      "claims_text": "Vendor X can be deployed faster than an internal build. The current process pain is urgent. Delaying the capability has operational costs.",
+      "assumptions_text": "Vendor X can integrate with current systems. Vendor implementation timelines are realistic. The vendor can meet support expectations.",
+      "evidence_text": "Vendor demos show coverage of core workflows. Reference customers report faster deployment than internal builds.",
+      "criteria_text": "Time to value, operational reliability, support quality, implementation risk.",
+      "risks_text": "Vendor lock-in, contract inflexibility, integration gaps.",
+      "confidence": 0.74,
+      "would_change_mind": "This position would weaken if technical discovery shows major integration blockers or hidden implementation costs."
+    },
+    {
+      "stakeholder_name": "Engineering Lead",
+      "label": "Build internally",
+      "recommendation": "Build the capability internally to preserve control and avoid long-term vendor dependency.",
+      "reasoning_text": "The capability is strategically important. Building internally allows the company to customize workflows, control architecture, and avoid vendor lock-in.",
+      "claims_text": "Internal build provides more control. Vendor lock-in could become costly. The company already has some technical capability required for the build.",
+      "assumptions_text": "Engineering has enough capacity. The requirements will evolve in ways that require customization. Long-term control is more valuable than short-term speed.",
+      "evidence_text": "Existing internal systems already cover part of the workflow. Engineering has built similar internal tools before.",
+      "criteria_text": "Strategic control, flexibility, long-term cost, architecture fit, data ownership.",
+      "risks_text": "Delivery delay, engineering capacity constraints, unclear requirements, maintenance burden.",
+      "confidence": 0.7,
+      "would_change_mind": "This position would weaken if the capability is not strategic or if the vendor contract includes strong portability and customization guarantees."
+    },
+    {
+      "stakeholder_name": "Procurement Manager",
+      "label": "Hybrid vendor-first approach",
+      "recommendation": "Start with Vendor X but negotiate exit clauses, data portability, and integration safeguards.",
+      "reasoning_text": "A vendor-first approach can deliver value quickly while reducing long-term lock-in risk through contract design and architecture safeguards.",
+      "claims_text": "Contract terms can reduce vendor dependency. A phased approach lowers immediate delivery risk. Data portability is essential if the company later builds internally.",
+      "assumptions_text": "Vendor X will accept reasonable contract safeguards. The company can design integrations to avoid excessive dependency. A later transition remains possible.",
+      "evidence_text": "Procurement can include exit clauses, service-level agreements, and data export requirements in the contract.",
+      "criteria_text": "Time to value, contractual flexibility, risk reduction, data portability, implementation control.",
+      "risks_text": "Vendor refuses key terms, hybrid approach creates complexity, future migration is harder than expected.",
+      "confidence": 0.79,
+      "would_change_mind": "This position would weaken if Vendor X refuses data portability or if internal build estimates are faster than expected."
+    }
+  ]
+}

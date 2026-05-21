@@ -1,0 +1,72 @@
+{
+  "project": {
+    "name": "ReasonGraph MVP Examples",
+    "description": "Seed examples for testing business reasoning and disagreement structuring."
+  },
+  "issue": {
+    "title": "Pricing strategy",
+    "business_context": "The company is considering whether to increase prices next quarter in response to margin pressure, rising costs, and revenue targets.",
+    "decision_question": "Should the company increase prices by 15%, keep prices unchanged, or use a segmented pricing strategy?",
+    "mode": "reasoning_analysis",
+    "in_scope": "Gross margin, churn risk, customer segments, competitor pricing, revenue targets, willingness to pay, implementation complexity.",
+    "out_of_scope": "General macroeconomic debates, unrelated brand strategy, long-term product roadmap."
+  },
+  "stakeholders": [
+    {
+      "name": "Finance Director",
+      "role": "Margin and revenue owner",
+      "organization_unit": "Finance"
+    },
+    {
+      "name": "Sales Director",
+      "role": "Customer retention and revenue owner",
+      "organization_unit": "Sales"
+    },
+    {
+      "name": "Product Strategy Lead",
+      "role": "Pricing and packaging strategy owner",
+      "organization_unit": "Product"
+    }
+  ],
+  "positions": [
+    {
+      "stakeholder_name": "Finance Director",
+      "label": "Increase prices by 15%",
+      "recommendation": "Apply a 15% price increase next quarter to protect gross margin.",
+      "reasoning_text": "Costs have increased and current prices no longer support the target gross margin. If the company delays the increase, it may need to cut spending or accept lower profitability.",
+      "claims_text": "Gross margin is below target. Cost inflation has not been fully passed to customers. A price increase would improve unit economics.",
+      "assumptions_text": "Most customers will tolerate a 15% increase. Competitors are also facing cost pressure. The company can communicate the increase without damaging trust.",
+      "evidence_text": "Recent margin reports show declining gross margin. Supplier costs have increased over the last two quarters.",
+      "criteria_text": "Gross margin, revenue protection, implementation speed, financial predictability.",
+      "risks_text": "Customer churn, negative customer reaction, sales team resistance.",
+      "confidence": 0.72,
+      "would_change_mind": "This position would weaken if churn modeling shows that the price increase would reduce net revenue."
+    },
+    {
+      "stakeholder_name": "Sales Director",
+      "label": "Keep prices unchanged",
+      "recommendation": "Avoid a general price increase because churn risk is too high.",
+      "reasoning_text": "Customers are price-sensitive and several accounts are already considering alternatives. A broad price increase could trigger churn and damage commercial relationships.",
+      "claims_text": "A 15% price increase would increase churn risk. Some competitors may keep prices stable to win accounts. Sales teams will face stronger objections.",
+      "assumptions_text": "Customers have viable alternatives. Price is a major driver of retention. Account managers can defend current pricing better than a price increase.",
+      "evidence_text": "Sales feedback indicates higher price sensitivity. Some recent renewal conversations included budget objections.",
+      "criteria_text": "Customer retention, net revenue, relationship stability, competitive positioning.",
+      "risks_text": "Margin pressure remains unresolved. The company may underprice its value. Finance targets may be missed.",
+      "confidence": 0.68,
+      "would_change_mind": "This position would weaken if customer segmentation shows that high-value segments can tolerate higher prices."
+    },
+    {
+      "stakeholder_name": "Product Strategy Lead",
+      "label": "Use segmented pricing",
+      "recommendation": "Avoid a blanket increase and apply segmented pricing based on customer value, usage, and willingness to pay.",
+      "reasoning_text": "A segmented approach can improve margins while reducing churn risk. Customers with higher usage or stronger value realization may tolerate increases better than price-sensitive segments.",
+      "claims_text": "Customer segments differ in willingness to pay. A blanket price increase is less precise than segmented pricing. Segmented pricing can balance margin and retention.",
+      "assumptions_text": "The company has enough customer data to segment pricing. Sales and billing systems can support differentiated pricing. Customers will accept segment-based changes if communicated clearly.",
+      "evidence_text": "Usage data, renewal history, and account size can be used to identify segments.",
+      "criteria_text": "Margin improvement, churn control, fairness, implementation complexity, customer value alignment.",
+      "risks_text": "Operational complexity, perceived unfairness, implementation delays.",
+      "confidence": 0.81,
+      "would_change_mind": "This position would weaken if the company cannot operationalize segmentation quickly or fairly."
+    }
+  ]
+}

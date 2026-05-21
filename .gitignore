@@ -1,7 +1,21 @@
 # Data
-/data/
+
+
+
+# Data folders
+data/raw/
+data/interim/
+data/processed/
+data/external/
+
+# Local app database files
 data/app/*.db
 data/app/*.db-*
+
+# Keep seed examples versioned
+!data/examples/
+!data/examples/*.json
+
 
 # Mac OS-specific storage files
 .DS_Store

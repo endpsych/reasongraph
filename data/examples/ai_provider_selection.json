@@ -1,0 +1,72 @@
+{
+  "project": {
+    "name": "ReasonGraph MVP Examples",
+    "description": "Seed examples for testing business reasoning and disagreement structuring."
+  },
+  "issue": {
+    "title": "AI provider selection",
+    "business_context": "The company needs to choose an AI provider strategy for internal business reasoning workflows.",
+    "decision_question": "Should the company use OpenAI, another hosted provider, local open-weight models, or a hybrid approach?",
+    "mode": "reasoning_analysis",
+    "in_scope": "Model quality, cost, data privacy, latency, integration complexity, auditability, developer experience, operational reliability.",
+    "out_of_scope": "General political debates about AI companies, unrelated AI ethics debates, consumer chatbot preferences."
+  },
+  "stakeholders": [
+    {
+      "name": "CTO",
+      "role": "Technology decision maker",
+      "organization_unit": "Technology"
+    },
+    {
+      "name": "Compliance Officer",
+      "role": "Risk and regulatory control owner",
+      "organization_unit": "Compliance"
+    },
+    {
+      "name": "AI Product Lead",
+      "role": "AI product delivery owner",
+      "organization_unit": "Product"
+    }
+  ],
+  "positions": [
+    {
+      "stakeholder_name": "CTO",
+      "label": "Use OpenAI for the first MVP",
+      "recommendation": "Use OpenAI API initially, then evaluate local models later.",
+      "reasoning_text": "OpenAI provides strong model quality, mature APIs, reliable documentation, and faster implementation for the MVP.",
+      "claims_text": "OpenAI has better implementation speed for this project. OpenAI reduces initial engineering complexity. OpenAI has mature API documentation and SDK support.",
+      "assumptions_text": "The MVP will not process highly sensitive confidential data. API cost will remain acceptable during early testing. The team benefits more from speed than from full infrastructure control at this stage.",
+      "evidence_text": "OpenAI has mature API documentation and SDK support. The team can integrate the API faster than hosting and optimizing local models.",
+      "criteria_text": "Implementation speed, model quality, reliability, developer experience.",
+      "risks_text": "External API dependency, cost uncertainty, data governance concerns.",
+      "confidence": 0.78,
+      "would_change_mind": "A local model would become preferable if data sensitivity or cost constraints become dominant."
+    },
+    {
+      "stakeholder_name": "Compliance Officer",
+      "label": "Prefer local or private deployment",
+      "recommendation": "Use local open-weight models or a private deployment if sensitive data is involved.",
+      "reasoning_text": "Business reasoning workflows may include confidential information. The company should reduce external data exposure and preserve auditability.",
+      "claims_text": "External API use can create data governance concerns. Local or private deployment offers stronger control over sensitive information. Compliance requirements may limit what data can be sent to hosted providers.",
+      "assumptions_text": "Users may enter sensitive business information. The company needs strong control over data residency, logging, and access. Local model quality is sufficient for some internal workflows.",
+      "evidence_text": "Internal policies require careful handling of confidential business data. Regulated business workflows often require strict data governance.",
+      "criteria_text": "Data control, auditability, compliance defensibility, access control, privacy risk.",
+      "risks_text": "Lower model quality, higher infrastructure burden, slower implementation, maintenance complexity.",
+      "confidence": 0.76,
+      "would_change_mind": "This position would weaken if the provider contract, architecture, and usage controls clearly prevent sensitive data exposure."
+    },
+    {
+      "stakeholder_name": "AI Product Lead",
+      "label": "Use a hybrid provider strategy",
+      "recommendation": "Use OpenAI for low-sensitivity high-complexity tasks and local/private models for sensitive or routine tasks.",
+      "reasoning_text": "A hybrid strategy balances quality, speed, and control. Not all tasks have the same sensitivity or model-quality requirements.",
+      "claims_text": "Different AI tasks require different provider strategies. Hybrid routing can reduce risk while preserving access to high-quality models. Provider choice should depend on data sensitivity and task complexity.",
+      "assumptions_text": "The product can classify tasks by sensitivity and complexity. The system can route requests reliably. The team can maintain more than one provider integration.",
+      "evidence_text": "The MVP has distinct workflows, some requiring high reasoning quality and others requiring stronger data control.",
+      "criteria_text": "Task fit, data sensitivity, model quality, operational complexity, cost control.",
+      "risks_text": "Routing complexity, inconsistent outputs across models, increased testing burden, provider management overhead.",
+      "confidence": 0.84,
+      "would_change_mind": "This position would weaken if maintaining multiple provider integrations slows the MVP too much."
+    }
+  ]
+}

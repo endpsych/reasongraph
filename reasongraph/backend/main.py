@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from reasongraph.backend.api.routes_positions import router as positions_router
 from reasongraph.backend.api.routes_projects import router as projects_router
 from reasongraph.backend.db.init_db import init_db
 
@@ -24,3 +25,4 @@ def health_check() -> dict[str, str]:
 
 
 app.include_router(projects_router)
+app.include_router(positions_router)

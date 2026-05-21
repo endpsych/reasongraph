@@ -1,49 +1,103 @@
-[build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
-
 [project]
 name = "reasongraph"
-version = "0.0.1"
-description = "Business reasoning and disagreement mapping app using Neo4j and LLMs"
-authors = [
-  { name = "Ender De Freitas" },
-]
-license = { file = "LICENSE" }
+version = "0.1.0"
+description = "Business reasoning graph app for mapping stakeholder positions, claims, assumptions, evidence, risks, and LLM POVs."
 readme = "README.md"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License"
+requires-python = ">=3.11,<3.12"
+license = { text = "MIT" }
+authors = [
+  { name = "Ender De Freitas" }
 ]
-dependencies = [
-    "ipython",
-    "jupyterlab",
-    "loguru",
-    "matplotlib",
-    "mkdocs",
-    "notebook",
-    "numpy",
-    "pandas",
-    "pip",
-    "pytest",
-    "python-dotenv",
-    "ruff",
-    "scikit-learn",
-    "tqdm",
-    "typer",
-]
-requires-python = "~=3.11.0"
 
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0",
+
+  "pydantic>=2.8.0",
+  "pydantic-settings>=2.4.0",
+
+  "sqlmodel>=0.0.22",
+  "sqlalchemy>=2.0.0",
+
+  "neo4j>=5.24.0",
+  "openai>=1.50.0",
+  "langgraph>=0.2.0",
+
+  "python-dotenv>=1.0.1",
+  "keyring>=25.0.0",
+  "cryptography>=43.0.0",
+
+  "httpx>=0.27.0",
+  "tenacity>=8.5.0",
+  "orjson>=3.10.0",
+
+  "typer>=0.12.0",
+  "loguru>=0.7.0",
+  "tqdm>=4.66.0",
+  "rich>=13.8.0",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3.0",
+  "pytest-cov>=5.0.0",
+  "ruff>=0.6.0",
+  "mypy>=1.11.0",
+  "pre-commit>=3.8.0",
+]
+
+eval = [
+  "ragas>=0.2.0",
+  "datasets>=2.20.0",
+]
+
+notebooks = [
+  "ipykernel>=6.29.0",
+  "jupyterlab>=4.2.0",
+]
+
+[project.scripts]
+reasongraph = "reasongraph.dataset:app"
+
+[tool.uv]
+package = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["reasongraph"]
 
 [tool.ruff]
-line-length = 99
-src = ["reasongraph"]
-include = ["pyproject.toml", "reasongraph/**/*.py"]
+line-length = 100
+target-version = "py311"
 
 [tool.ruff.lint]
-extend-select = ["I"]  # Add import sorting
+select = [
+  "E",
+  "F",
+  "I",
+  "B",
+  "UP",
+]
+ignore = []
 
-[tool.ruff.lint.isort]
-known-first-party = ["reasongraph"]
-force-sort-within-sections = true
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+[tool.coverage.run]
+source = ["reasongraph"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
